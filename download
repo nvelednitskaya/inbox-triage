@@ -1,0 +1,9 @@
+# Local / editor
+.DS_Store
+*.log
+.clasp.json
+.claspignore
+
+# Never commit secrets — keys live in Apps Script Script Properties, not here
+*.key
+secrets*
