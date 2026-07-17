@@ -1,0 +1,9 @@
+timestamp,mode,source,from,subject,category,priority,summary,archived,telegram,thread_id
+2026-07-16 01:20,DRY_RUN,rule,news@store.example,Weekly deals just for you,РАССЫЛКИ,P3,promo digest,да,,a1b2c3d4
+2026-07-16 01:20,DRY_RUN,rule,digest@social.example,You have 12 new notifications,РАССЫЛКИ,P3,social digest,да,,e5f6a7b8
+2026-07-16 01:20,DRY_RUN,rule,no-reply@accounts.google.com,Security alert,АККАУНТЫ,P2,new sign-in notice,,,c9d0e1f2
+2026-07-16 01:43,DRY_RUN,personal,a.friend@example.com,re: weekend,ЛИЧНОЕ,P3,message from a contact,,да,3a4b5c6d
+2026-07-16 01:43,DRY_RUN,gemini,recruiter@company.example,Interview invitation,КАРЬЕРА,P1,recruiter proposes a call this week,,да,7e8f9a0b
+2026-07-16 01:43,DRY_RUN,gemini,host@stay.example,Your reservation,ПОЕЗДКИ,P2,host asks about arrival time,,да,1c2d3e4f
+2026-07-16 01:47,DRY_RUN,rule,invoice@utility.example,Payment due,СЧЕТА,P2,monthly bill,,,5a6b7c8d
+2026-07-16 01:47,DRY_RUN,gemini,mailer-daemon@mail.example,Delivery Status Notification,НЕЯСНО,P3,bounce notice,,,9e0f1a2b
