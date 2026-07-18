@@ -15,6 +15,9 @@
  *   2. SENDER_RULES     → категория по отправителю (0 токенов)
  *   3. Gemini           → всё неопознанное, одним батчем
  *
+ * Уведомления в Telegram — только для писем свежее NOTIFY_MAX_AGE_HOURS,
+ * чтобы разбор накопленного инбокса не завалил бота старой почтой.
+ *
  * DRY_RUN = true: почта не трогается, только лог. Выключите после
  * проверки качества (см. инструкцию).
  * ------------------------------------------------------------
@@ -26,6 +29,7 @@ const MAX_THREADS_PER_RUN = 30;
 const SNIPPET_CHARS = 300;
 const GEMINI_MODEL = 'gemini-3.1-flash-lite'; // check current names: run listModels()
 const PROCESSED_LABEL = 'AI-Обработано'; // служебная метка «уже разобрано»
+const NOTIFY_MAX_AGE_HOURS = 6;        // в Telegram — только письма свежее N часов
 
 // ЛИЧНОЕ: впишите адреса или домены людей, чьи письма всегда идут в «Личное».
 // Достаточно подстроки: 'ivanov@gmail.com' или просто 'ivanov'.
@@ -93,6 +97,7 @@ function triageInbox() {
       from: msg.getFrom(),
       subject: msg.getSubject() || '(без темы)',
       snippet: safeSnippet_(msg),
+      date: msg.getDate(),
       category: null, priority: 'P3', summary: '', needsReply: false, source: '',
     };
   });
@@ -134,7 +139,7 @@ function triageInbox() {
   items.forEach(it => {
     const act = CATEGORY_ACTIONS[it.category] || CATEGORY_ACTIONS['НЕЯСНО'];
     const doArchive = act.archive && ARCHIVE_ALLOWED.includes(it.category);
-    const doTelegram = act.telegram; // только Личное / Карьера / Поездки
+    const doTelegram = act.telegram && isRecent_(it.date); // свежие Личное / Карьера / Поездки
 
     if (!DRY_RUN) {
       const labelCfg = LABELS[it.category];
@@ -231,6 +236,14 @@ function classifyWithGemini_(items) {
 }
 
 // ==================== ХЕЛПЕРЫ ====================
+
+/** Письмо свежее порога? Старое разбирается по ярлыкам, но без уведомления.
+ *  Нужно, чтобы первый прогон по накопленному инбоксу не завалил Telegram. */
+function isRecent_(date) {
+  if (!date) return false;
+  const ageHours = (Date.now() - date.getTime()) / 36e5;
+  return ageHours <= NOTIFY_MAX_AGE_HOURS;
+}
 
 function isPersonal_(from) {
   const f = from.toLowerCase();
