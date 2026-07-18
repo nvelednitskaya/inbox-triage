@@ -94,6 +94,12 @@ mislabeled, add it to `SENDER_RULES` or `PERSONAL_SENDERS`. When you trust it,
 set `DRY_RUN = false` and save — the script starts labeling, archiving, and
 notifying for real.
 
+On the first live runs the script works through the mail already sitting in the
+inbox. Sorting old mail into labels is fine, but you don't want a Telegram
+message for each one, so notifications are limited to mail newer than
+`NOTIFY_MAX_AGE_HOURS` (6 by default). Older mail still gets labeled and
+archived, just silently.
+
 ## Undo
 
 - Stop everything: Triggers → delete the trigger.
